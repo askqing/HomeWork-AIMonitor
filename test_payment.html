@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试支付订单创建</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>测试支付订单创建</h1>
+    <form id="paymentForm">
+        <div class="form-group">
+            <label for="type">支付方式</label>
+            <select id="type">
+                <option value="alipay">支付宝</option>
+                <option value="wxpay">微信支付</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="method">支付方法</label>
+            <select id="method">
+                <option value="web">通用网页支付</option>
+                <option value="jump">跳转支付</option>
+                <option value="jsapi">JSAPI支付</option>
+                <option value="app">APP支付</option>
+                <option value="scan">付款码支付</option>
+                <option value="applet">小程序支付</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="name">商品名称</label>
+            <input type="text" id="name" value="测试商品" required>
+        </div>
+        <div class="form-group">
+            <label for="money">商品金额</label>
+            <input type="text" id="money" value="1.00" required>
+        </div>
+        <div class="form-group">
+            <label for="param">业务扩展参数</label>
+            <input type="text" id="param" value="test">
+        </div>
+        <button type="submit">创建支付订单</button>
+    </form>
+    <div id="result">
+        <h3>结果:</h3>
+        <pre id="resultText">点击按钮开始测试...</pre>
+    </div>
+
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultText = document.getElementById('resultText');
+            resultText.textContent = '正在创建支付订单...';
+            
+            try {
+                const formData = {
+                    type: document.getElementById('type').value,
+                    method: document.getElementById('method').value,
+                    name: document.getElementById('name').value,
+                    money: document.getElementById('money').value,
+                    param: document.getElementById('param').value
+                };
+                
+                const response = await fetch('http://localhost:3000/api/payment/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                resultText.textContent = JSON.stringify(result, null, 2);
+                
+            } catch (error) {
+                resultText.textContent = '错误: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
