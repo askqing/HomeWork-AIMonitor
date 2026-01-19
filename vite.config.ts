@@ -93,5 +93,11 @@ export default defineConfig({
     port: 3000,
     host: 'localhost',
     open: false
+  },
+  define: {
+    'process.env': {
+      GLM_API_KEY: JSON.stringify(process.env.GLM_API_KEY),
+      ICP_RECORD_NUMBER: JSON.stringify(process.env.ICP_RECORD_NUMBER)
+    }
   }
 })

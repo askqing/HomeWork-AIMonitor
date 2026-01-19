@@ -617,7 +617,7 @@ import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 
 // 获取环境变量
 const appName = ref('AI作业小助手')
-const icpRecordNumber = ref('京ICP备XXXXXXXXXX号')
+const icpRecordNumber = ref(process.env.ICP_RECORD_NUMBER || '')
 
 // 状态管理
 const videoElement = ref(null)
